@@ -43,6 +43,7 @@ export default function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
+        {/* ---- Public / storefront routes (wrapped in Layout) ---- */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
@@ -77,23 +78,27 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+        </Route>
 
-          <Route
-            path="/admin/*"
-            element={
-              <ProtectedRoute admin>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<AdminDashboard />} />
-            <Route path="products" element={<AdminProducts />} />
-            <Route path="orders" element={<AdminOrders />} />
-            <Route path="customers" element={<AdminCustomers />} />
-            <Route path="banners" element={<AdminBanners />} />
-            <Route path="categories" element={<AdminCategories />} />
-          </Route>
+        {/* ---- Admin routes (outside storefront Layout, use their own AdminLayout) ---- */}
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute admin>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="banners" element={<AdminBanners />} />
+          <Route path="categories" element={<AdminCategories />} />
+        </Route>
 
+        {/* 404 — must be a child of Layout so the public header/footer show */}
+        <Route element={<Layout />}>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
